@@ -2,6 +2,7 @@ package com.wu.myweather;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -51,7 +52,6 @@ public class ChooseAreaFragment extends Fragment {
     private List<County> countyList;
     private Province selectedProvince;
     private City selectCity;
-    private County selectCounty;
     private int currentLevel;
 
     public ChooseAreaFragment() {
@@ -83,6 +83,12 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_CITY){
                     selectCity = cityList.get(position);
                     queryCountys();
+                }else if(currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -172,7 +178,9 @@ public class ChooseAreaFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseText = response.body().toString();
+                closeProgressDialog();
+                String responseText = response.body().string();
+                System.out.println(responseText);
                 boolean result = false;
                 if("province".equals(type)){
                     result = Utility.handleProvinceResponse(responseText);
@@ -182,6 +190,7 @@ public class ChooseAreaFragment extends Fragment {
                     result = Utility.handleCountyResponse(responseText,selectCity.getId());
                 }
                 if(result){
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
