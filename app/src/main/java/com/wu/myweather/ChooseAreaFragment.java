@@ -163,7 +163,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryFromServer(String address,final String type){
-        showProgressDialog();
+//        showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -178,7 +178,7 @@ public class ChooseAreaFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                closeProgressDialog();
+//                closeProgressDialog();
                 String responseText = response.body().string();
                 System.out.println(responseText);
                 boolean result = false;
@@ -194,7 +194,7 @@ public class ChooseAreaFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            closeProgressDialog();
+//                            closeProgressDialog();
                             if("province".equals(type)){
                                 queryProvinces();
                             }else if("city".equals(type)){
